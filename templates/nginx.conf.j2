@@ -59,7 +59,7 @@ events {
 
 {% if nginx_main_template.http_enable %}
 http {
-    include       /etc/nginx/mime.types;
+    include       mime.types;
     default_type  application/octet-stream;
 
 {% for access_log in nginx_main_template.http_settings.access_log_format %}
