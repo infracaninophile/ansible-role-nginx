@@ -295,7 +295,7 @@
 
 - name: "(Install: Linux) Add NGINX User"
   user:
-    name: nginx
+    name: '{{ nginx_user }}'
 
 - name: "(Install: Linux) Install NGINX"
   when: not nginx_result.stat.exists

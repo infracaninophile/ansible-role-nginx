@@ -5,7 +5,7 @@ nginx_html_demo_template:
   default:
     template_file: www/index.html.j2
     html_file_name: index.html
-    html_file_location: /usr/share/nginx/html
+    html_file_location: '{{ nginx_default_web_root }}'
     web_server_name: Default
 
 # Enable creating dynamic templated NGINX configuration files.
@@ -14,12 +14,12 @@ nginx_main_template_enable: false
 nginx_main_template:
   template_file: nginx.conf.j2
   conf_file_name: nginx.conf
-  conf_file_location: /etc/nginx/
-  user: nginx
+  conf_file_location: '{{ nginx_config_dir }}'
+  user: '{{ nginx_user }}'
   worker_processes: auto
   # worker_rlimit_nofile: 1024
   error_log:
-    location: /var/log/nginx/error.log
+    location: '{{ nginx_log_dir }}/error.log'
     level: warn
   worker_connections: 1024
   http_enable: true
@@ -32,7 +32,7 @@ nginx_main_template:
           '"$http_user_agent" "$http_x_forwarded_for"'
     access_log_location:
       - name: main
-        location: /var/log/nginx/access.log
+        location: '{{ nginx_log_dir }}/access.log'
     tcp_nopush: true
     tcp_nodelay: true
     keepalive_timeout: 65
@@ -62,7 +62,7 @@ nginx_http_template:
   default:
     template_file: http/default.conf.j2
     conf_file_name: default.conf
-    conf_file_location: /etc/nginx/conf.d/
+    conf_file_location: '{{ nginx_conf_d_dir }}'
     servers:
       server1:
         listen:
@@ -73,14 +73,14 @@ nginx_http_template:
             opts: []  # Listen opts like http2 which will be added (ssl is automatically added if you specify 'ssl:').
         server_name: localhost
         include_files: []
-        error_page: /usr/share/nginx/html
+        error_page: '{{ nginx_default_web_root }}'
         access_log:
           - name: main
-            location: /var/log/nginx/access.log
+            location: '{{ nginx_log_dir }}/access.log'
         error_log:
-          location: /var/log/nginx/error.log
+          location: '{{ nginx_log_dir }}/error.log'
           level: warn
-        root: /usr/share/nginx/html
+        root: '{{ nginx_default_web_root }}'
         # https_redirect: $host
         autoindex: false
         auth_basic: null
@@ -102,16 +102,16 @@ nginx_http_template:
           #   value: Value-X
           #   always: false
         ssl:
-          cert: /etc/ssl/certs/default.crt
-          key: /etc/ssl/private/default.key
-          dhparam: /etc/ssl/private/dh_param.pem
+          cert: '{{ nginx_ssl_dir }}/certs/default.crt'
+          key: '{{ nginx_ssl_dir }}/private/default.key'
+          dhparam: '{{ nginx_ssl_dir }}/private/dh_param.pem'
           protocols: TLSv1 TLSv1.1 TLSv1.2
           ciphers: HIGH:!aNULL:!MD5
           prefer_server_ciphers: true
           session_cache: none
           session_timeout: 5m
           disable_session_tickets: false
-          trusted_cert: /etc/ssl/certs/root_CA_cert_plus_intermediates.crt
+          trusted_cert: '{{ nginx_ssl_dir }}/certs/root_CA_cert_plus_intermediates.crt'
           stapling: true
           stapling_verify: true
           buffer_size: 16k
@@ -211,9 +211,9 @@ nginx_http_template:
               proxy_read_timeout: null
               proxy_send_timeout: null
               proxy_ssl:
-                cert: /etc/ssl/certs/proxy_default.crt
-                key: /etc/ssl/private/proxy_default.key
-                trusted_cert: /etc/ssl/certs/proxy_ca.crt
+                cert: '{{ nginx_ssl_dir }}/certs/proxy_default.crt'
+                key: '{{ nginx_ssl_dir }}/private/proxy_default.key'
+                trusted_cert: '{{ nginx_ssl_dir }}/certs/proxy_ca.crt'
                 protocols: TLSv1 TLSv1.1 TLSv1.2
                 ciphers: HIGH:!aNULL:!MD5
                 verify: false
@@ -226,7 +226,7 @@ nginx_http_template:
                 - code: 301
                   time: 1m
               proxy_temp_path:
-                path: /var/cache/nginx/proxy/backend/temp
+                path: '{{ nginx_cache_dir }}/proxy/backend/temp'
               proxy_cache_lock: false
               proxy_cache_min_uses: 3
               proxy_cache_revalidate: false
@@ -267,7 +267,7 @@ nginx_http_template:
             value: http://$host$request_uri
     proxy_cache:
       proxy_cache_path:
-        - path: /var/cache/nginx/proxy/backend
+        - path: '{{ nginx_cache_dir }}/proxy/backend'
           keys_zone:
             name: backend_proxy_cache
             size: 10m
@@ -276,7 +276,7 @@ nginx_http_template:
           inactive: 60m
           use_temp_path: true
       proxy_temp_path:
-        path: /var/cache/nginx/proxy/temp
+        path: '{{ nginx_cache_dir }}/proxy/temp'
       proxy_cache_valid:
         - code: 200
           time: 10m
@@ -311,7 +311,7 @@ nginx_http_template:
 # Note - 'status' has been deprecated since NGINX Plus R13.
 # Default is false.
 nginx_status_enable: false
-nginx_status_location: /etc/nginx/conf.d/stub_status.conf
+nginx_status_location: '{{ nginx_conf_d_dir }}/stub_status.conf'
 nginx_status_port: 80
 
 # Enable NGINX Plus REST API, write access to the REST API, and NGINX Plus dashboard.
@@ -319,7 +319,7 @@ nginx_status_port: 80
 # Default is false.
 nginx_rest_api_enable: false
 nginx_rest_api_template_file: http/api.conf.j2
-nginx_rest_api_file_location: /etc/nginx/conf.d/api.conf
+nginx_rest_api_file_location: '{{ nginx_conf_d_dir }}/api.conf'
 nginx_rest_api_port: 80
 nginx_rest_api_write: false
 nginx_rest_api_dashboard: false
@@ -332,7 +332,7 @@ nginx_stream_template:
   default:
     template_file: stream/default.conf.j2
     conf_file_name: default.conf
-    conf_file_location: /etc/nginx/conf.d/stream/
+    conf_file_location: '{{ nginx_conf_d_dir}}/stream/'
     network_streams:
       default:
         listen_address: localhost
@@ -344,9 +344,9 @@ nginx_stream_template:
         proxy_connect_timeout: 1s
         proxy_protocol: false
         proxy_ssl:
-          cert: /etc/ssl/certs/proxy_default.crt
-          key: /etc/ssl/private/proxy_default.key
-          trusted_cert: /etc/ssl/certs/proxy_ca.crt
+          cert: '{{ nginx_ssl_dir }}/certs/proxy_default.crt'
+          key: '{{ nginx_ssl_dir }}/private/proxy_default.key'
+          trusted_cert: '{{ nginx_ssl_dir }}/certs/proxy_ca.crt'
           protocols: TLSv1 TLSv1.1 TLSv1.2
           ciphers: HIGH:!aNULL:!MD5
           verify: false

@@ -4,13 +4,13 @@
 
     - name: "(Setup: All OSs Besides Alpine Linux) Create SSL Directory"
       file:
-        path: /etc/ssl/nginx
+        path: '{{ nginx_ssl_dir }}/nginx'
         state: directory
 
     - name: "(Setup: All OSs Besides Alpine Linux) Copy NGINX Plus Certificate and License Key"
       copy:
         src: "{{ item }}"
-        dest: /etc/ssl/nginx
+        dest: '{{ nginx_ssl_dir }}/nginx'
         decrypt: yes
       with_items:
         - "{{ nginx_license.certificate }}"

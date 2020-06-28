@@ -13,8 +13,8 @@
     block: |
       Acquire::https::plus-pkgs.nginx.com::Verify-Peer "true";
       Acquire::https::plus-pkgs.nginx.com::Verify-Host "true";
-      Acquire::https::plus-pkgs.nginx.com::SslCert     "/etc/ssl/nginx/nginx-repo.crt";
-      Acquire::https::plus-pkgs.nginx.com::SslKey      "/etc/ssl/nginx/nginx-repo.key";
+      Acquire::https::plus-pkgs.nginx.com::SslCert     "{{ nginx_ssl_dir }}/nginx/nginx-repo.crt";
+      Acquire::https::plus-pkgs.nginx.com::SslKey      "{{ nginx_ssl_dir }}/nginx/nginx-repo.key";
     state: "{{ nginx_license_status | default ('present') }}"
 
 - name: "(Setup: Debian/Ubuntu) Update APT Cache"

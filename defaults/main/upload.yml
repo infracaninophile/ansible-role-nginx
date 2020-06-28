@@ -5,22 +5,22 @@
 # Upload the main NGINX configuration file.
 nginx_main_upload_enable: false
 nginx_main_upload_src: conf/nginx.conf
-nginx_main_upload_dest: /etc/nginx/
+nginx_main_upload_dest: '{{ nginx_config_dir }}'
 # Upload HTTP NGINX configuration files.
 nginx_http_upload_enable: false
 nginx_http_upload_src: conf/http/*.conf
-nginx_http_upload_dest: /etc/nginx/conf.d/
+nginx_http_upload_dest: '{{ nginx_conf_d_dir }}'
 # Upload Stream NGINX configuration files.
 nginx_stream_upload_enable: false
 nginx_stream_upload_src: conf/stream/*.conf
-nginx_stream_upload_dest: /etc/nginx/conf.d/
+nginx_stream_upload_dest: '{{ nginx_conf_d_dir }}'
 # Upload HTML files.
 nginx_html_upload_enable: false
 nginx_html_upload_src: www/*
-nginx_html_upload_dest: /usr/share/nginx/html
+nginx_html_upload_dest: '{{ nginx_default_web_root }}'
 # Upload SSL certificates and keys.
 nginx_ssl_upload_enable: false
 nginx_ssl_crt_upload_src: ssl/*.crt
-nginx_ssl_crt_upload_dest: /etc/ssl/certs/
+nginx_ssl_crt_upload_dest: '{{ nginx_ssl_dir }}/certs/'
 nginx_ssl_key_upload_src: ssl/*.key
-nginx_ssl_key_upload_dest: /etc/ssl/private/
+nginx_ssl_key_upload_dest: '{{ nginx_ssl_dir }}/private/'

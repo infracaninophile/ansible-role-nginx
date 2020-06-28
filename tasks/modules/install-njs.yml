@@ -13,7 +13,7 @@
 
 - name: "(Setup: All NGINX) Load NGINX JavaScript Module"
   lineinfile:
-    path: /etc/nginx/nginx.conf
+    path: '{{ nginx_config_dir }}/nginx.conf'
     insertbefore: BOF
     line: "{{ item }}"
   with_items:

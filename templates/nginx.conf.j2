@@ -118,7 +118,7 @@ http {
     {{ inline_option }}
 {% endfor %}
 {% endif %}
-    include /etc/nginx/conf.d/*.conf;
+    include {{ nginx_conf_d_dir }}/*.conf;
 }
 {% endif %}
 
@@ -129,6 +129,6 @@ stream {
     {{ inline_option }}
 {% endfor %}
 {% endif %}
-    include /etc/nginx/conf.d/stream/*.conf;
+    include {{ nginx_conf_d_dir }}/stream/*.conf;
 }
 {% endif %}
