@@ -2,6 +2,7 @@
 - name: "(Setup: NGINX Open Source) Enable NGINX Open Source Status"
   blockinfile:
     path: "{{ nginx_status_location }}"
+    mode: 0644
     create: yes
     block: |
       server {
@@ -18,6 +19,7 @@
 - name: "(Setup: NGINX Plus) Enable NGINX Plus Status"
   blockinfile:
     path: "{{ nginx_status_location }}"
+    mode: 0644
     create: yes
     block: |
       server {

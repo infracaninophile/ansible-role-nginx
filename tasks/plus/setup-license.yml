@@ -5,6 +5,7 @@
     - name: "(Setup: All OSs Besides Alpine Linux) Create SSL Directory"
       file:
         path: '{{ nginx_ssl_dir }}/nginx'
+        mode: 0755
         state: directory
 
     - name: "(Setup: All OSs Besides Alpine Linux) Copy NGINX Plus Certificate and License Key"
@@ -12,6 +13,7 @@
         src: "{{ item }}"
         dest: '{{ nginx_ssl_dir }}/nginx'
         decrypt: yes
+        mode: 0640
       with_items:
         - "{{ nginx_license.certificate }}"
         - "{{ nginx_license.key }}"
@@ -24,18 +26,21 @@
     - name: "(Setup: Alpine Linux) Create APK Directory"
       file:
         path: /etc/apk
+        mode: 0755
         state: directory
 
     - name: "(Setup: Alpine Linux) Copy NGINX Plus Key"
       copy:
         src: "{{ nginx_license.key }}"
         dest: /etc/apk/cert.key
+        mode: 0640
         decrypt: yes
 
     - name: "(Setup: Alpine Linux) Copy NGINX Plus Certificate"
       copy:
         src: "{{ nginx_license.certificate }}"
         dest: /etc/apk/cert.pem
+        mode: 0644
         decrypt: yes
 
   when: ansible_distribution == "Alpine"

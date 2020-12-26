@@ -3,9 +3,10 @@
   assemble:
     src: '{{ nginx_ssl_dir }}/nginx'
     dest: '{{ nginx_ssl_dir }}/nginx/nginx-repo-bundle.crt'
+    mode: 0644
 
 - name: "(Setup: SUSE) Setup NGINX Plus Repository"
   zypper_repository:
     name: nginx-plus
-    repo: "https://plus-pkgs.nginx.com/sles/{{ ansible_distribution_major_version }}?ssl_clientcert={{ nginx_ssl_dir }}/nginx/nginx-repo-bundle.crt&ssl_verify=host"
+    repo: "https://plus-pkgs.nginx.com/sles/{{ ansible_distribution_major_version }}?ssl_clientcert={{ nginx_ssl_dir }}/nginx/nginx-repo-bundle.crt&ssl_verify=host" # noqa 204
     state: "{{ nginx_license_status | default ('present') }}"

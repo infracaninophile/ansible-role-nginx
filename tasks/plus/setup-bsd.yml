@@ -2,6 +2,7 @@
 - name: "(Setup: FreeBSD) Setup NGINX Plus Repository"
   blockinfile:
     path: '{{ nginx_prefix }}/pkg/repos/nginx-plus.conf'
+    mode: 0644
     create: yes
     block: |
       nginx-plus: {
@@ -14,6 +15,7 @@
 - name: "(Setup: FreeBSD) Setup NGINX Plus License"
   blockinfile:
     path: '{{ nginx_prefix }}/pkg.conf'
+    mode: 0644
     block: |
       PKG_ENV: { SSL_NO_VERIFY_PEER: "1",
       SSL_CLIENT_CERT_FILE: "{{ nginx_ssl_dir }}/nginx/nginx-repo.crt",

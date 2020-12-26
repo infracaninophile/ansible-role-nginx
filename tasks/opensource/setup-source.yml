@@ -346,6 +346,7 @@
     - name: "(Install: Linux) Install NGINX: Create html directory"
       file:
         path: /usr/share/nginx/html
+        mode: 0755
         state: directory
 
     - name: "(Install: Linux) Install NGINX: Copy index.html"

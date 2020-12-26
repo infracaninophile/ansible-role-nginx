@@ -1,37 +1,42 @@
 ---
 - name: "(Setup: All NGINX) Ensure HTML Directory Exists"
   file:
-    path: "{{ item.value.html_file_location | default('{{ nginx_default_web_root }}') }}"
+    path: "{{ item.value.html_file_location | default( nginx_default_web_root ) }}"
     state: directory
+    mode: 0755
   with_dict: "{{ nginx_html_demo_template }}"
   when: nginx_html_demo_template_enable | bool
 
 - name: "(Setup: All NGINX) Dynamically Generate HTML Files"
   template:
     src: "{{ item.value.template_file | default('www/index.html.j2') }}"
-    dest: "{{ item.value.html_file_location | default('{{ nginx_default_web_root }}') }}/{{ item.value.html_file_name | default('index.html') }}"
+    dest: "{{ item.value.html_file_location | default( nginx_default_web_root ) }}/{{ item.value.html_file_name | default('index.html') }}"
+    mode: 0644
     backup: yes
   with_dict: "{{ nginx_html_demo_template }}"
   when: nginx_html_demo_template_enable | bool
 
 - name: "(Setup: All NGINX) Ensure NGINX Main Directory Exists"
   file:
-    path: "{{ nginx_main_template.conf_file_location | default('{{ nginx_config_dir }}') }}"
+    path: "{{ nginx_main_template.conf_file_location | default( nginx_config_dir ) }}"
     state: directory
+    mode: 0755
   when: nginx_main_template_enable | bool
 
 - name: "(Setup: All NGINX) Dynamically Generate NGINX Main Configuration File"
   template:
     src: "{{ nginx_main_template.template_file | default('nginx.conf.j2') }}"
-    dest: "{{ nginx_main_template.conf_file_location | default('{{ nginx_config_dir }}') }}/{{ nginx_main_template.conf_file_name | default('nginx.conf') }}"
+    dest: "{{ nginx_main_template.conf_file_location | default( nginx_config_dir ) }}/{{ nginx_main_template.conf_file_name | default('nginx.conf') }}"
+    mode: 0644
     backup: yes
   when: nginx_main_template_enable | bool
   notify: "(Handler: All OSs) Reload NGINX"
 
 - name: "(Setup: All NGINX) Ensure NGINX HTTP Directory Exists"
   file:
-    path: "{{ item.value.conf_file_location | default('{{ nginx_conf_d_dir }}/') }}"
+    path: "{{ item.value.conf_file_location | default( nginx_conf_d_dir ) }}"
     state: directory
+    mode: 0755
   with_dict: "{{ nginx_http_template }}"
   when: nginx_http_template_enable | bool
 
@@ -39,7 +44,8 @@
   file:
     path: "{{ item.1.path }}"
     state: directory
-    owner: "{{ nginx_main_template.user | default('{{ nginx_user }}') }}"
+    mode: 0755
+    owner: "{{ nginx_main_template.user | default( nginx_user ) }}"
   with_subelements:
     - "{{ nginx_http_template }}"
     - proxy_cache.proxy_cache_path
@@ -49,7 +55,8 @@
 - name: "(Setup: All NGINX) Dynamically Generate NGINX HTTP Configuration Files"
   template:
     src: "{{ item.value.template_file | default('http/default.conf.j2') }}"
-    dest: "{{ item.value.conf_file_location | default('{{ nginx_conf_d_dir }}/') }}/{{ item.value.conf_file_name | default('default.conf') }}"
+    dest: "{{ item.value.conf_file_location | default( nginx_conf_d_dir ) }}/{{ item.value.conf_file_name | default('default.conf') }}"
+    mode: 0644
     backup: yes
   with_dict: "{{ nginx_http_template }}"
   when: nginx_http_template_enable | bool
@@ -59,22 +66,25 @@
 - name: "(Setup: All NGINX) Dynamically Generate NGINX API Configuration File"
   template:
     src: "{{ nginx_rest_api_template_file | default('http/api.conf.j2') }}"
-    dest: "{{ nginx_rest_api_file_location | default('{{ nginx_conf_d_dir }}/api.conf') }}"
+    dest: "{{ nginx_rest_api_file_location | default( nginx_conf_d_dir ~ '/api.conf' ) }}"
+    mode: 0644
     backup: yes
   notify: "(Handler: All OSs) Reload NGINX"
   when: nginx_rest_api_enable | bool
 
 - name: "(Setup: All NGINX) Ensure NGINX Stream Directory Exists"
   file:
-    path: "{{ item.value.conf_file_location | default('{{ nginx_conf_d_dir }}/stream/') }}"
+    path: "{{ item.value.conf_file_location | default( nginx_conf_d_dir ~ '/stream/') }}"
     state: directory
+    mode: 0755
   with_dict: "{{ nginx_stream_template }}"
   when: nginx_stream_template_enable | bool
 
 - name: "(Setup: All NGINX) Dynamically Generate NGINX Stream Configuration Files"
   template:
     src: "{{ item.value.template_file | default('stream/default.conf.j2') }}"
-    dest: "{{ item.value.conf_file_location | default('{{ nginx_conf_d_dir }}/stream/') }}/{{ item.value.conf_file_name | default('default.conf') }}"
+    dest: "{{ item.value.conf_file_location | default( nginx_conf_d_dir ~ '/stream/') }}/{{ item.value.conf_file_name | default('default.conf') }}"
+    mode: 0644
     backup: yes
   with_dict: "{{ nginx_stream_template }}"
   notify: "(Handler: All OSs) Reload NGINX"
