@@ -1,4 +1,17 @@
 ---
+
+# Linux defaults
+nginx_prefix: ''
+nginx_default_web_root: '/usr/share/nginx/html'
+nginx_user: nginx
+nginx_group: nginx
+
+# BSD defaults
+#nginx_prefix: /usr/local
+#nginx_default_web_root: "{{ nginx_prefix }}/www/nginx"
+#nginx_user: www
+#nginx_group: www
+
 # Install NGINX.
 # Default is true.
 nginx_enable: true

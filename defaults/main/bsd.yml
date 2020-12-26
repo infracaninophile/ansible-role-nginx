@@ -1,10 +1,4 @@
 ---
-nginx_prefix: /usr/local
-
-nginx_default_web_root: "{{ nginx_prefix }}/www/nginx"
-
-nginx_user: www
-nginx_group: www
 
 # Supported distributions
 nginx_bsd_systems:
