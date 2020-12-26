@@ -86,12 +86,12 @@ nginx_modules:
   xslt: false
 
 # Location of config files -- OS dependent
-nginx_etc_dir="{{ prefix }}/etc"
-nginx_config_dir="{{ nginx_etc_dir }}/nginx"
-nginx_conf_d_dir="{{ nginx_config_dir }}/conf.d"
-nginx_ssl_dir="{{ nginx_etc_dir }}/ssl"
-nginx_log_dir=/var/log/nginx
-nginx_cache_dir=/var/cache/nginx
+nginx_etc_dir: "{{ prefix }}/etc"
+nginx_config_dir: "{{ nginx_etc_dir }}/nginx"
+nginx_conf_d_dir: "{{ nginx_config_dir }}/conf.d"
+nginx_ssl_dir: "{{ nginx_etc_dir }}/ssl"
+nginx_log_dir: /var/log/nginx
+nginx_cache_dir: /var/cache/nginx
 
 # Remove previously existing NGINX configuration files.
 # You can specify a list of paths you wish to remove.
