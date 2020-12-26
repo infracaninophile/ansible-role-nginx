@@ -86,7 +86,7 @@ nginx_modules:
   xslt: false
 
 # Location of config files -- OS dependent
-nginx_etc_dir: "{{ prefix }}/etc"
+nginx_etc_dir: "{{ nginx_prefix }}/etc"
 nginx_config_dir: "{{ nginx_etc_dir }}/nginx"
 nginx_conf_d_dir: "{{ nginx_config_dir }}/conf.d"
 nginx_ssl_dir: "{{ nginx_etc_dir }}/ssl"
